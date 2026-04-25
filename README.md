@@ -8,7 +8,7 @@ Built as part of my data engineering portfolio to demonstrate skills in SQL, ETL
 
 ## Architecture
 
-![Architecture](docs/data_architecture.png)
+![Architecture](docs/retail_sales_data_warehouse_architecture.svg)
 
 The warehouse follows a three-layer medallion design:
 
