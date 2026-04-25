@@ -49,13 +49,15 @@ FILES = {
 }
 
 
-def validate(df: pd.DataFrame, table: str) -> None:
+def validate(df: pd.DataFrame) -> None:
     """Log basic data quality stats before inserting."""
     total      = len(df)
-    null_count = df.isnull().sum().sum()
-    dup_count  = df.duplicated().sum()
+    null_count = int(df.isnull().sum().sum())
+    dup_count  = int(df.duplicated().sum())
+    total_cells = total * len(df.columns)
+    null_pct   = (null_count / total_cells * 100) if total_cells > 0 else 0.0
     print(f"   Rows      : {total:,}")
-    print(f"   Nulls     : {null_count:,}  ({null_count/max(total*len(df.columns),1)*100:.1f}% of cells)")
+    print(f"   Nulls     : {null_count:,}  ({null_pct:.1f}% of cells)")
     print(f"   Duplicates: {dup_count:,}")
 
 
@@ -92,7 +94,7 @@ def main() -> None:
         t0 = time.time()
 
         df = pd.read_csv(filepath, low_memory=False)
-        validate(df, table)
+        validate(df)
 
         load_table(cursor, table, df)
         conn.commit()
